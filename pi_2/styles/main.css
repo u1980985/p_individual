@@ -10,7 +10,6 @@
 	width: 18.75rem;
 	height: 4.6875rem;
 	font-size: 1rem;
-	margin-top: 0.625rem;
 }
 
 p{
@@ -31,11 +30,14 @@ button.menu-object:hover:not(:active){
 
 .container {
 	display: grid;
-	grid-template-columns: repeat(3, 1fr);
 	justify-items: center;
 	align-items: center;
-	grid-column-gap: 10px;
-    grid-row-gap: 10px; 
+	grid-column-gap: 0.625rem;
+    grid-row-gap: 0.625rem; 
+	grid-template-columns: repeat(3, 1fr);
+	border: 2px solid red; 
+	padding: 1rem;
   }
+
   
 
