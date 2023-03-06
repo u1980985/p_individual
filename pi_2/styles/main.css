@@ -34,6 +34,8 @@ button.menu-object:hover:not(:active){
 	grid-template-columns: repeat(3, 1fr);
 	justify-items: center;
 	align-items: center;
+	grid-column-gap: 10px;
+    grid-row-gap: 10px; 
   }
   
 
