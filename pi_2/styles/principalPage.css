@@ -28,12 +28,3 @@ button.menu-object:hover:not(:active){
 	width: 20.3125rem;
 	height: 5.3125rem;
 }
-
-.container {
-	display: grid;
-	grid-template-columns: repeat(3, 1fr);
-	justify-items: center;
-	align-items: center;
-  }
-  
-
