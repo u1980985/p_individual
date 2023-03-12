@@ -10,7 +10,8 @@
 	width: 18.75rem;
 	height: 4.6875rem;
 	font-size: 1rem;
-	margin-top: 0.625rem;
+	margin-top: 0.425rem;
+	margin-bottom: 0.425rem;
 }
 
 p{
@@ -28,3 +29,20 @@ button.menu-object:hover:not(:active){
 	width: 20.3125rem;
 	height: 5.3125rem;
 }
+
+.container {
+	display: grid;
+	justify-items: center;
+	align-items: center;
+	border: 0.125rem solid red; 
+	padding: 1rem;
+	border-radius: 10rem;
+	max-width: 50%;
+	margin-left: auto;
+	margin-right: auto;
+  }
+  
+ #boton{
+	background-color: #3B83BD; 
+	border-radius: 1rem;
+  }

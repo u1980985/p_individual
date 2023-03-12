@@ -35,9 +35,16 @@ button.menu-object:hover:not(:active){
 	grid-column-gap: 0.625rem;
     grid-row-gap: 0.625rem; 
 	grid-template-columns: repeat(3, 1fr);
-	border: 2px solid red; 
+	border: 0.125rem solid red; 
 	padding: 1rem;
+	border-radius: 10rem;
   }
+
+ #boton{
+	background-color: #3B83BD; 
+	border-radius: 1rem;
+  }
+
 
   
 
