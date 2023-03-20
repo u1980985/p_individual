@@ -6,7 +6,19 @@ function openIndexGame(){
 	loadpage("./pi_2/index.html");
 }
 
-function exit (){
+function openIndexGamePI_3(){
+	loadpage("./pi_3/index.html");
+}
+
+function exitPI_2 (){
+	if (name != ""){
+		alert("Leaving " + name + "'s game");
+	}
+	name = "";
+	loadpage("../index.html");
+}
+
+function exitPI_3 (){
 	if (name != ""){
 		alert("Leaving " + name + "'s game");
 	}
