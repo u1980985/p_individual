@@ -62,5 +62,3 @@ console.log(options.getDificulty());
 console.log(options.options_data);
 
 
-
-
