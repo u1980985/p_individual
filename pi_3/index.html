@@ -1,7 +1,7 @@
 <!DOCTYPE html> 
 <html>
 	<head>
-		<link rel="stylesheet" href="./styles/main.css">
+		<link rel="stylesheet" href="../pi_2/styles/principalPage.css">
 		<script src="./js/loader.js"></script>
 		<script src="./js/game_info.js"></script>
 		<script src="./js/menu_controller.js"></script>
@@ -9,15 +9,17 @@
 	</head>
 	<body>
 		<p class="menu-object" id="title">Memory menu</p>
-		<button class="menu-object" onclick="start_game()"> 
-			Start Game 
-		</button>
-		<button class="menu-object" onclick="options()"> 
-			Options 
-		</button>
-		<button class="menu-object" onclick="exit()"> 
-			Exit 
-		</button>
+		<div class="container">
+			<button class="menu-object" id="boton" onclick="start_game()"> 
+				Start Game 
+			</button>
+			<button class="menu-object" id="boton" onclick="options()"> 
+				Options 
+			</button>
+			<button class="menu-object" id="boton" onclick="exit()"> 
+				Exit 
+			</button>
+		</div>
 	</body>
 </html>
 
