@@ -1,8 +1,9 @@
 const back = "../resources/back.png";
 const items = ["../resources/cb.png","../resources/co.png","../resources/sb.png",
 "../resources/so.png","../resources/tb.png","../resources/to.png"];
-var tiempoEspera=1500;
+var tiempoEspera=2000;
 var continueGame=false;
+var restaPunts=5;
 var game = new Vue({
 	el: "#game_id",
 	data: {
@@ -20,10 +21,12 @@ var game = new Vue({
 		var dificultad=options_data.dificulty;
 		switch(dificultad) {
 			case 'normal':
-			  tiempoEspera/=2;
+			  tiempoEspera/=1.8;
+			  restaPunts=10;	
 			  break;
 			case 'hard':
-				tiempoEspera/=4;
+				tiempoEspera/=2.7;
+				restaPunts=20;
 			  break;
 		  }
 
@@ -33,23 +36,24 @@ var game = new Vue({
 		this.items = this.items.slice(0, this.num_cards); // Agafem els primers numCards elements
 		this.items = this.items.concat(this.items); // Dupliquem els elements
 		this.items.sort(function(){return Math.random() - 0.5}); // Array aleatòria
-
+		console.log(tiempoEspera*2.7);
+		console.log(restaPunts);
 		for (var i = 0; i < this.items.length; i++){
-			this.current_card.push({done: false, texture: back});
+			this.current_card.push({done: false, texture: this.items[i]});
 		}
 
 		setTimeout(() =>{
 			for(var i=0; i < this.items.length; i++){
-				Vue.set(this.current_card,i,{done:false,texture: this.items[i]});
+				Vue.set(this.current_card,i,{done:false,texture: back});
 			}
 			continueGame=true
-		}, 1000);
+		}, tiempoEspera);
 	},
 	methods: {
 		clickCard: function(i){
 			if (!this.current_card[i].done && this.current_card[i].texture === back)
 				Vue.set(this.current_card, i, {done: false, texture: this.items[i]});
-		}
+			}
 	},
 	watch: {
 		current_card: function(value){
@@ -82,7 +86,7 @@ var game = new Vue({
 	},
 	computed: {
 		score_text: function(){
-			return 100 - this.bad_clicks * 20;
+			return 100 - this.bad_clicks * restaPunts;
 		}
 	}
 });
