@@ -13,7 +13,7 @@ class GameScene extends Phaser.Scene {
 		this.tiempoEspera=2000;
 		this.restaPunts=5;
 		this.items=['co', 'cb', 'sb', 'so','tb','to'];
-		this.l_partida=NULL;
+		this.l_partida=null;
 		
     }
 
