@@ -31,7 +31,7 @@ class GameScene extends Phaser.Scene {
 		if (sessionStorage.idPartida && localStorage.partides){
 			let arrayPartides = JSON.parse(localStorage.partides);
 			if (sessionStorage.idPartida < arrayPartides.length)
-				l_partida = arrayPartides[sessionStorage.idPartida];
+				this.l_partida = arrayPartides[sessionStorage.idPartida];
 		}
 		if (this.l_partida){
 			this.username = this.l_partida.username;
