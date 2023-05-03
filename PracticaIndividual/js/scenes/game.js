@@ -88,7 +88,6 @@ class GameScene extends Phaser.Scene {
 		});
 	}
 	
-	update(){	}
 	
 	save(){
 		let partida = {
