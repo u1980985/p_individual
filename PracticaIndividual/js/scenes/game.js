@@ -9,11 +9,11 @@ class GameScene extends Phaser.Scene {
 		this.arraycards=[];
 		this.num_cards=2;
 		this.dificultad=0;
-		this.tiempoEspera=0;
 		this.tiempoEspera=2000;
 		this.restaPunts=5;
 		this.items=['co', 'cb', 'sb', 'so','tb','to'];
 		this.l_partida=null;
+		this.continueGame=false;
 		
     }
 
@@ -28,6 +28,7 @@ class GameScene extends Phaser.Scene {
 	}
 	
     create (){
+		let maximCartas=this.num_cards*2;
 		this.cameras.main.setBackgroundColor(0xBFFCFF);
 		this.cards = this.physics.add.staticGroup();
 		if (sessionStorage.idPartida && localStorage.partides){
@@ -47,44 +48,54 @@ class GameScene extends Phaser.Scene {
 			this.transformacionJson();
 			this.cambiarDificultad();
 			this.mezclarYMostrar(x,y);
-			/*this.time.delayedCall(tiempoEspera, () => {
-				for (var i = 0; i < this.items.length; i++) {
-				  this.current_card[i] = ;
+			setTimeout(() =>{
+				for(var i=0; i < this.arraycards.length; i++){
+					this.cards.create(x, y, 'back');
+					//Vue.set(this.current_card,i,{done:false,texture: back});
+					x+=110;
+					if(x>=800){
+						x=70;
+						y=450;
+					}
 				}
-				continueGame = true;
-			  }, null, this);*/
+				this.continueGame=true;
+		}, this.tiempoEspera);
 		}
+		let text= this.add.text(10,10,this.username,{ font: '32px Arial', fill: 'black' });
 		let i = 0;
-		this.cards.children.iterate((card)=>{
-			card.card_id = this.arraycards[i];
-			i++;
-			card.setInteractive();
-			card.on('pointerup', () => {
-				card.disableBody(true,true);
-				if (this.firstClick){
-					if (this.firstClick.card_id !== card.card_id){
-						this.score -= 10;
-						this.firstClick.enableBody(false, 0, 0, true, true);
-						card.enableBody(false, 0, 0, true, true);
-						if (this.score <= 0){
-							alert("Game Over");
-							loadpage("../");
+		if(this.continueGame){
+			this.cards.children.iterate((card)=>{
+				card.card_id = this.arraycards[i]%maximCartas;
+				i++;
+				console.log(this.arraycards[i]%maximCartas)
+				card.setInteractive();
+				card.on('pointerup', () => {
+					card.disableBody(true,true);
+					if (this.firstClick){
+						if (this.firstClick.card_id !== card.card_id){
+							this.score -= 10;
+							this.firstClick.enableBody(false, 0, 0, true, true);
+							card.enableBody(false, 0, 0, true, true);
+							if (this.score <= 0){
+								alert("Game Over");
+								loadpage("../");
+							}
 						}
+						else{
+							this.correct++;
+							if (this.correct >= this.num_cards){
+								alert("You Win with " + this.score + " points.");
+								loadpage("../");
+							}
+						}
+						this.firstClick = null;
 					}
 					else{
-						this.correct++;
-						if (this.correct >= this.num_cards){
-							alert("You Win with " + this.score + " points.");
-							loadpage("../");
-						}
+						this.firstClick = card;
 					}
-					this.firstClick = null;
-				}
-				else{
-					this.firstClick = card;
-				}
-			}, card);
-		});
+				}, card);
+			});
+		}
 	}
 	
 	
