@@ -43,7 +43,7 @@ var gameObj = function (){
 			}
 			else{
 				this.username = sessionStorage.getItem("username","unknown");
-				this.items = items.slice(); // Copiem l'array
+				this.items = this.items.slice(); // Copiem l'array
 				this.items.sort(function(){return Math.random() - 0.5}); // Array aleatòria
 				this.items = this.items.slice(0, this.num_cards); // Agafem els primers numCards elements
 				this.items = this.items.concat(this.items); // Dupliquem els elements

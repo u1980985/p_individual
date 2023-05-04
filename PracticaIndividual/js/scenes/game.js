@@ -28,6 +28,8 @@ class GameScene extends Phaser.Scene {
 	}
 	
     create (){
+		this.cameras.main.setBackgroundColor(0xBFFCFF);
+		this.cards = this.physics.add.staticGroup();
 		if (sessionStorage.idPartida && localStorage.partides){
 			let arrayPartides = JSON.parse(localStorage.partides);
 			if (sessionStorage.idPartida < arrayPartides.length)
@@ -35,16 +37,16 @@ class GameScene extends Phaser.Scene {
 		}
 		if (this.l_partida){
 			this.username = this.l_partida.username;
-			this.current_card = this.l_partida.current_card;
+			this.firstClick = this.l_partida.firstClick;
 			this.items = this.l_partida.items;
 			this.num_cards = this.l_partida.num_cards;
 			this.score = this.l_partida.score;
 		}
 		else {
-			let x=150, y=300;
-			transformacionJson();
-			cambiarDificultad();
-			mezclarYMostrar(x,y);
+			let x=70, y=300;
+			this.transformacionJson();
+			this.cambiarDificultad();
+			this.mezclarYMostrar(x,y);
 			/*this.time.delayedCall(tiempoEspera, () => {
 				for (var i = 0; i < this.items.length; i++) {
 				  this.current_card[i] = ;
@@ -52,12 +54,9 @@ class GameScene extends Phaser.Scene {
 				continueGame = true;
 			  }, null, this);*/
 		}
-		
-		this.cameras.main.setBackgroundColor(0xBFFCFF);
-		this.cards = this.physics.add.staticGroup();
 		let i = 0;
 		this.cards.children.iterate((card)=>{
-			card.card_id = arraycards[i];
+			card.card_id = this.arraycards[i];
 			i++;
 			card.setInteractive();
 			card.on('pointerup', () => {
@@ -92,7 +91,7 @@ class GameScene extends Phaser.Scene {
 	save(){
 		let partida = {
 			username: this.username,
-			current_card: this.current_card,
+			current_card: this.firstClick,
 			items: this.items,
 			num_cards: this.num_cards,
 			score: this.score
@@ -126,7 +125,7 @@ class GameScene extends Phaser.Scene {
 		this.dificultad= game_data.dificulty;
 	}
 	mezclarYMostrar(x,y){
-		this.items = items.slice(); // Copiem l'array
+		this.items = this.items.slice(); // Copiem l'array
 		this.items.sort(function(){return Math.random() - 0.5}); // Array aleatòria
 		this.items = this.items.slice(0, this.num_cards); // Agafem els primers numCards elements
 		this.items = this.items.concat(this.items); // Dupliquem els elements
@@ -136,11 +135,11 @@ class GameScene extends Phaser.Scene {
 		}	
 		for(let k=0; k<this.arraycards.length; k++){
 			this.add.image(x, y, this.arraycards[k]);
-			this.cards.create(x, y, this.arraycards[k]);
-			x+=100;
+			this.cards.create(x, y, 'back' /*this.arraycards[k]*/);
+			x+=110;
 			if(x>=800){
-				x=250;
-				y=400;
+				x=70;
+				y=450;
 			}
 		}
 	}
