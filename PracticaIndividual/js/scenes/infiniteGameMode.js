@@ -10,7 +10,7 @@ class GameScene extends Phaser.Scene {
 		this.arraycards=[];
 		this.num_cards=2;
 		this.nivell=1;
-		this.tiempoEspera=2000;
+		this.tiempoEspera=1500;
 		this.restaPunts=5;
         this.nivell;
 		this.items=['co', 'cb', 'sb', 'so','tb','to'];
@@ -113,6 +113,28 @@ class GameScene extends Phaser.Scene {
 							this.correct++;
 							this.arrayCartes[card.id]=1;
 							if (this.correct >= this.num_cards){
+                                this.nivell++;
+                                if(nivell%2){
+                                    this.tiempoEspera-=30;
+                                    this.restaPunts+=3;
+                                    if(this.tiempoEspera<1) this.tiempoEspera=1;
+                                }
+                                else{
+                                    this.num_cards++;
+                                    if(this.num_cards>=21) this.num_cards=21;
+                                }
+                                let partidaActual = {
+                                    username: this.username,
+                                    arrayCartes: this.arrayCartes,
+                                    items: this.items,
+                                    num_cards: this.num_cards,
+                                    score: this.score,
+                                    restaPunts: this.restaPunts,
+                                    tiempoEspera: this.tiempoEspera,
+                                    arraycards: this.arraycards,
+                                    nivell: this.nivell
+                                }
+                                sessionStorage.partidaActual=JSON.parse(partidaActual);
 								alert("You Win with " + this.score + " points.");
 								loadpage("../");
 							}
@@ -127,7 +149,8 @@ class GameScene extends Phaser.Scene {
 		}, this.tiempoEspera);
         this.username = sessionStorage.getItem("username","unknown");
 		let text= this.add.text(10,10,this.username,{ font: '32px Arial', fill: 'black' });
-		this.button=this.add.text(150,10, "GUARDAR", {font: '32px Arial', fill: 'black' })
+        let text2= this.add.text(250,10,this.nivell,{ font: '32px Arial', fill: 'black' });
+		this.button=this.add.text(150,10, "GUARDAR", {font: '32px Arial', fill: 'black' });
 		this.button.setInteractive();
 		this.button.on('pointerup', () => {
 			this.button.setBackgroundColor('#FFA07A')
@@ -163,11 +186,19 @@ class GameScene extends Phaser.Scene {
 		var json = localStorage.getItem("config") || '{"cards":2,"nivell":1}';
 		var game_data = JSON.parse(json);
 		this.nivell=game_data.nivell;
-		for(let i=0; i<this.nivell; i++){
+        console.log(this.num_cards);
+		for(let i=2; i<=this.nivell; i++){
             if(i%2){
+                console.log(this.num_cards);
                 this.tiempoEspera-=30;
+                this.restaPunts+=3;
+                if(this.tiempoEspera<1) this.tiempoEspera=1;
             }
-            else if( i>0 && !i%2) this.num_cards++;
+            else{
+                console.log(this.num_cards);
+                  this.num_cards++;
+                  if(this.num_cards>=21) this.num_cards=21;
+            }
         }
 	}
 	mezclarYMostrar(x,y){
