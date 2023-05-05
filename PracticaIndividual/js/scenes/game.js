@@ -75,7 +75,7 @@ class GameScene extends Phaser.Scene {
 			for(let j=0; j < this.arraycards.length; j++){
 				if (this.arrayCartes[j]==1)
 					this.cards.create(x, y, 'back');
-				else this.cards.create(x, y, 'back');
+				else if(! this.l_partida ) this.cards.create(x, y, 'back');
 				//Vue.set(this.current_card,i,{done:false,texture: back});
 				x+=110;
 				if(x>=800){
