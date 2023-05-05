@@ -3,7 +3,7 @@ function start_game(){
 	
 	sessionStorage.setItem("username", name);
 	
-	loadpage("./html/game.html");
+	loadpage("./html/infiniteMode.html");
 }
 
 function phaser_game(){
@@ -26,5 +26,8 @@ function options(){
 
 function load(){
 	loadpage("./html/load.html");
+}
+function load2(){
+	loadpage("./html/loadRushMode.html");
 }
 

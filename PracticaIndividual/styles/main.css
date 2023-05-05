@@ -21,6 +21,17 @@ input[type=number]{
 	margin-top: 10px;
 }
 
+.eliminar{
+	display:block;
+	margin-left: auto;
+	margin-right: auto;
+	width: 300px;
+	height: 75px;
+	font-size: 16px;
+	margin-top: 10px;
+	background-color: red;
+}
+
 p{
 	text-align: center;
 }

@@ -9,14 +9,16 @@ class GameScene extends Phaser.Scene {
 		this.correct = 0;
 		this.arraycards=[];
 		this.num_cards=2;
-		this.dificultad= ' ';
+		this.nivell=1;
 		this.tiempoEspera=2000;
 		this.restaPunts=5;
+        this.nivell;
 		this.items=['co', 'cb', 'sb', 'so','tb','to'];
 		this.l_partida=null;
 		this.continueGame=false;
 		this.arrayCartes=[];
-		this.username=' '; //aa
+		this.username=' ';
+        this.nextRound=null;
 		
     }
 
@@ -35,15 +37,18 @@ class GameScene extends Phaser.Scene {
 		this.cameras.main.setBackgroundColor(0xBFFCFF);
 		this.cards = this.physics.add.staticGroup();
 		var x=70, y=200;
-		if (sessionStorage.idPartida && localStorage.partides){
-			var arrayPartides = JSON.parse(localStorage.partides);
+        if (sessionStorage.ronda){
+           this.nextRound=JSON.parse(sessionStorage.partidaActual);
+        }
+		else if (sessionStorage.idPartida && localStorage.partidesInfinitas){
+			var arrayPartides = JSON.parse(localStorage.partidesInfinitas);
 			if (sessionStorage.idPartida < arrayPartides.length)
 				this.l_partida = arrayPartides[sessionStorage.idPartida];
 		}
 		if (this.l_partida){
-			console.log(this.l_partida);
+			/*console.log(this.l_partida);
 			console.log(arrayPartides);
-			console.log(sessionStorage.idPartida);
+			console.log(sessionStorage.idPartida);*/
 			this.username = this.l_partida.username;
 			this.arrayCartes=this.l_partida.arrayCartes;
 			this.items = this.l_partida.items;
@@ -54,19 +59,14 @@ class GameScene extends Phaser.Scene {
 			this.tiempoEspera=this.l_partida.tiempoEspera;
 			this.bad_clicks=this.l_partida.bad_clicks;
 			this.arraycards=this.l_partida.arraycards;
-
-			for(let k=0; k<this.arraycards.length; k++){
-				this.add.image(x, y, this.arraycards[k]);
-				x+=110;
-				if(x>=800){
-					x=70;
-					y+=150;
-				}
-			}
+            this.nivell=this.l_partida.nivell;
+			afegirImatges();
 		}
+        else if (this.nextRound){
+
+        }
 		else {
 			this.transformacionJson();
-			this.cambiarDificultad();
 			this.mezclarYMostrar(x,y);
 		}
 		sessionStorage.clear();
@@ -125,6 +125,7 @@ class GameScene extends Phaser.Scene {
 				}, card);
 			});
 		}, this.tiempoEspera);
+        this.username = sessionStorage.getItem("username","unknown");
 		let text= this.add.text(10,10,this.username,{ font: '32px Arial', fill: 'black' });
 		this.button=this.add.text(150,10, "GUARDAR", {font: '32px Arial', fill: 'black' })
 		this.button.setInteractive();
@@ -145,35 +146,29 @@ class GameScene extends Phaser.Scene {
 			tiempoEspera: this.tiempoEspera,
 			bad_clicks: this.bad_clicks,
 			arraycards: this.arraycards,
+            nivell: this.nivell
 		}
 		let arrayPartides = [];
 		if(localStorage.partides){
-			arrayPartides = JSON.parse(localStorage.partides);
+			arrayPartides = JSON.parse(localStorage.partidesInfinitas);
 			if(!Array.isArray(arrayPartides)) arrayPartides = [];
 		}
 		arrayPartides.push(partida);
 
-		localStorage.partides = JSON.stringify(arrayPartides);
+		localStorage.partidesInfinitas = JSON.stringify(arrayPartides);
 		loadpage("../");
 	}
-	cambiarDificultad(){
-		switch(this.dificultad) {
-			case 'normal':
-			  this.tiempoEspera/=1.8;
-			  this.restaPunts=10;	
-			  break;
-			case 'hard':
-				this.tiempoEspera/=2.7;
-				this.restaPunts=14;
-			  break;
-		  }
-	}
-	transformacionJson(){
+    transformacionJson(){
 		this.username = sessionStorage.getItem("username","unknown");
-		var json = localStorage.getItem("config") || '{"cards":2,"dificulty":"hard"}';
+		var json = localStorage.getItem("config") || '{"cards":2,"nivell":1}';
 		var game_data = JSON.parse(json);
-		this.num_cards = game_data.cards;
-		this.dificultad= game_data.dificulty;
+		this.nivell=game_data.nivell;
+		for(let i=0; i<this.nivell; i++){
+            if(i%2){
+                this.tiempoEspera-=30;
+            }
+            else if( i>0 && !i%2) this.num_cards++;
+        }
 	}
 	mezclarYMostrar(x,y){
 		this.items = this.items.slice(); // Copiem l'array
@@ -194,5 +189,14 @@ class GameScene extends Phaser.Scene {
 			}
 		}
 	}
+    afegirImatges(){
+        for(let k=0; k<this.arraycards.length; k++){
+            this.add.image(x, y, this.arraycards[k]);
+            x+=110;
+            if(x>=800){
+                x=70;
+                y+=150;
+            }
+        }
+    }
 }
-

@@ -6,8 +6,8 @@ var load_obj = function(){
 		},
 		created: function(){
 			let arrayPartides = [];
-			if(localStorage.partides){
-				arrayPartides = JSON.parse(localStorage.partides);
+			if(localStorage.partidesInfinitas){
+				arrayPartides = JSON.parse(localStorage.partidesInfinitas);
 				if(!Array.isArray(arrayPartides)) arrayPartides = [];
 			}
 			this.saves = arrayPartides;
@@ -15,7 +15,7 @@ var load_obj = function(){
 		methods: { 
 			load: function(i){
 				sessionStorage.idPartida = i;
-				loadpage("../html/phasergame.html");
+				loadpage("../html/infiniteMode.html");
 			},
 			eliminar: function(){
 				localStorage.clear();
@@ -24,4 +24,3 @@ var load_obj = function(){
 	});
 	return {}; 
 }();
-
