@@ -190,7 +190,7 @@ class GameScene extends Phaser.Scene {
 		}	
 		for(let k=0; k<this.arraycards.length; k++){
 			this.add.image(x, y, this.arraycards[k]);
-			this.arrayCartes[k]=0;
+			this.arrayCartes[k]=2;
 			x+=110;
 			if(x>=800){
 				x=70;
