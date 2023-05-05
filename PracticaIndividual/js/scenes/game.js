@@ -73,10 +73,9 @@ class GameScene extends Phaser.Scene {
 		setTimeout(() =>{
 			y=200; x=70;
 			for(let j=0; j < this.arraycards.length; j++){
-				if (this.arrayCartes[j]==1)
+				if (this.arrayCartes[j]==0)
 					this.cards.create(x, y, 'back');
 				else if(! this.l_partida ) this.cards.create(x, y, 'back');
-				//Vue.set(this.current_card,i,{done:false,texture: back});
 				x+=110;
 				if(x>=800){
 					x=70;
@@ -146,18 +145,15 @@ class GameScene extends Phaser.Scene {
 			bad_clicks: this.bad_clicks,
 			arraycards: this.arraycards
 		}
-		//console.log(partida);
 		let arrayPartides = [];
 		if(localStorage.partides){
 			arrayPartides = JSON.parse(localStorage.partides);
 			if(!Array.isArray(arrayPartides)) arrayPartides = [];
 		}
 		arrayPartides.push(partida);
-		console.log(arrayPartides);
+
 		localStorage.partides = JSON.stringify(arrayPartides);
-		console.log(localStorage.partides);
-		console.log(JSON.parse(localStorage.partides));
-		//loadpage("../");
+		loadpage("../");
 	}
 	cambiarDificultad(){
 		switch(this.dificultad) {
