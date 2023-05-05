@@ -8,7 +8,7 @@ class GameScene extends Phaser.Scene {
 		this.bad_clicks=0;
 		this.correct = 0;
 		this.arraycards=[];
-		this.num_cards=2;
+		this.num_cards=1;
 		this.nivell=1;
 		this.tiempoEspera=1500;
 		this.restaPunts=5;
@@ -63,13 +63,23 @@ class GameScene extends Phaser.Scene {
 			afegirImatges();
 		}
         else if (this.nextRound){
-
+            this.username= this.nextRound.username;
+            this.arrayCartes= this.nextRound.arrayCartes;
+            this.items= this.nextRound.items;
+            this.num_cards= this.nextRound.num_cards;
+            this.score= this.nextRound.score;
+            this.restaPunts= this.nextRound.restaPunts;
+            this.tiempoEspera= this.nextRound.tiempoEspera;
+            this.arraycards= this.nextRound.arraycards;
+            this.nivell= this.nextRound.nivell;
+            //this.correct=this.nextRound.correct;
+            //this.bad_clicks=this.nextRound.bad_clicks;
         }
 		else {
 			this.transformacionJson();
-			this.mezclarYMostrar(x,y);
 		}
-		sessionStorage.clear();
+        this.mezclarYMostrar(x,y);
+        sessionStorage.clear();
 		//localStorage.clear();
 		setTimeout(() =>{
 			y=200; x=70;
@@ -114,7 +124,7 @@ class GameScene extends Phaser.Scene {
 							this.arrayCartes[card.id]=1;
 							if (this.correct >= this.num_cards){
                                 this.nivell++;
-                                if(nivell%2){
+                                if(this.nivell%2==0){
                                     this.tiempoEspera-=30;
                                     this.restaPunts+=3;
                                     if(this.tiempoEspera<1) this.tiempoEspera=1;
@@ -132,7 +142,8 @@ class GameScene extends Phaser.Scene {
                                     restaPunts: this.restaPunts,
                                     tiempoEspera: this.tiempoEspera,
                                     arraycards: this.arraycards,
-                                    nivell: this.nivell
+                                    nivell: this.nivell,
+                                    //correct:this.correct
                                 }
                                 sessionStorage.partidaActual=JSON.parse(partidaActual);
 								alert("You Win with " + this.score + " points.");
@@ -147,9 +158,7 @@ class GameScene extends Phaser.Scene {
 				}, card);
 			});
 		}, this.tiempoEspera);
-        this.username = sessionStorage.getItem("username","unknown");
-		let text= this.add.text(10,10,this.username,{ font: '32px Arial', fill: 'black' });
-        let text2= this.add.text(250,10,this.nivell,{ font: '32px Arial', fill: 'black' });
+        let text2= this.add.text(500,10,"Nivell: "+this.nivell,{ font: '32px Arial', fill: 'black' });
 		this.button=this.add.text(150,10, "GUARDAR", {font: '32px Arial', fill: 'black' });
 		this.button.setInteractive();
 		this.button.on('pointerup', () => {
@@ -183,25 +192,25 @@ class GameScene extends Phaser.Scene {
 	}
     transformacionJson(){
 		this.username = sessionStorage.getItem("username","unknown");
-		var json = localStorage.getItem("config") || '{"cards":2,"nivell":1}';
+		var json = localStorage.getItem("config") || '{"cards":1,"nivell":1}';
 		var game_data = JSON.parse(json);
 		this.nivell=game_data.nivell;
-        console.log(this.num_cards);
-		for(let i=2; i<=this.nivell; i++){
-            if(i%2){
-                console.log(this.num_cards);
+		for(let i=1; i<=this.nivell; i++){
+            if(i%2==0){
+                //console.log(this.num_cards);
                 this.tiempoEspera-=30;
                 this.restaPunts+=3;
                 if(this.tiempoEspera<1) this.tiempoEspera=1;
             }
             else{
-                console.log(this.num_cards);
                   this.num_cards++;
                   if(this.num_cards>=21) this.num_cards=21;
             }
         }
 	}
 	mezclarYMostrar(x,y){
+        this.username = sessionStorage.getItem("username","unknown");
+		let text= this.add.text(10,10,this.username,{ font: '32px Arial', fill: 'black' });
 		this.items = this.items.slice(); // Copiem l'array
 		this.items.sort(function(){return Math.random() - 0.5}); // Array aleatòria
 		this.items = this.items.slice(0, this.num_cards); // Agafem els primers numCards elements

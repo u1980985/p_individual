@@ -69,7 +69,6 @@ class GameScene extends Phaser.Scene {
 			this.cambiarDificultad();
 			this.mezclarYMostrar(x,y);
 		}
-		sessionStorage.clear();
 		//localStorage.clear();
 		setTimeout(() =>{
 			y=200; x=70;
@@ -132,6 +131,7 @@ class GameScene extends Phaser.Scene {
 			this.button.setBackgroundColor('#FFA07A')
 			this.save();
 		});
+		sessionStorage.clear();
 	}	
 	save(){
 		let partida = {
