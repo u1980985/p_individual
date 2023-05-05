@@ -8,7 +8,7 @@ class GameScene extends Phaser.Scene {
 		this.bad_clicks=0;
 		this.correct = 0;
 		this.arraycards=[];
-		this.num_cards=1;
+		this.num_cards=2;
 		this.nivell=1;
 		this.tiempoEspera=1500;
 		this.restaPunts=5;
@@ -19,6 +19,7 @@ class GameScene extends Phaser.Scene {
 		this.arrayCartes=[];
 		this.username=' ';
         this.nextRound=null;
+        this.consecutiveCorrect=0;
 		
     }
 
@@ -37,7 +38,7 @@ class GameScene extends Phaser.Scene {
 		this.cameras.main.setBackgroundColor(0xBFFCFF);
 		this.cards = this.physics.add.staticGroup();
 		var x=70, y=200;
-        if (sessionStorage.ronda){
+        if (sessionStorage.partidaActual){
            this.nextRound=JSON.parse(sessionStorage.partidaActual);
         }
 		else if (sessionStorage.idPartida && localStorage.partidesInfinitas){
@@ -60,26 +61,25 @@ class GameScene extends Phaser.Scene {
 			this.bad_clicks=this.l_partida.bad_clicks;
 			this.arraycards=this.l_partida.arraycards;
             this.nivell=this.l_partida.nivell;
-			afegirImatges();
+            this.consecutiveCorrect=this.l_partida.consecutiveCorrect;
+            
+			this.afegirImatges(x,y);
 		}
         else if (this.nextRound){
             this.username= this.nextRound.username;
-            this.arrayCartes= this.nextRound.arrayCartes;
-            this.items= this.nextRound.items;
             this.num_cards= this.nextRound.num_cards;
             this.score= this.nextRound.score;
             this.restaPunts= this.nextRound.restaPunts;
             this.tiempoEspera= this.nextRound.tiempoEspera;
-            this.arraycards= this.nextRound.arraycards;
             this.nivell= this.nextRound.nivell;
-            //this.correct=this.nextRound.correct;
-            //this.bad_clicks=this.nextRound.bad_clicks;
+            this.consecutiveCorrect=this.nextRound.consecutiveCorrect;
+            this.mezclarYMostrar(x,y);
         }
 		else {
 			this.transformacionJson();
+            this.mezclarYMostrar(x,y);
 		}
-        this.mezclarYMostrar(x,y);
-        sessionStorage.clear();
+        console.log(this.nextRound);
 		//localStorage.clear();
 		setTimeout(() =>{
 			y=200; x=70;
@@ -106,7 +106,8 @@ class GameScene extends Phaser.Scene {
 					if (this.firstClick){
 						if (this.firstClick.card_id !== card.card_id){
 							this.bad_clicks ++;
-							this.score =100-this.bad_clicks*this.restaPunts; console.log(this.score);
+                            this.consecutiveCorrect=0;
+							this.score =100-this.bad_clicks*this.restaPunts; 
 							setTimeout(() => {
 								this.firstClick.enableBody(false, 0, 0, true, true);
 								card.enableBody(false, 0, 0, true, true);
@@ -120,9 +121,10 @@ class GameScene extends Phaser.Scene {
 							}
 						}
 						else{
-							this.correct++;
+							this.correct++; this.consecutiveCorrect++;
 							this.arrayCartes[card.id]=1;
 							if (this.correct >= this.num_cards){
+                                this.score +=this.correct*this.consecutiveCorrect;
                                 this.nivell++;
                                 if(this.nivell%2==0){
                                     this.tiempoEspera-=30;
@@ -135,19 +137,16 @@ class GameScene extends Phaser.Scene {
                                 }
                                 let partidaActual = {
                                     username: this.username,
-                                    arrayCartes: this.arrayCartes,
-                                    items: this.items,
                                     num_cards: this.num_cards,
                                     score: this.score,
                                     restaPunts: this.restaPunts,
                                     tiempoEspera: this.tiempoEspera,
-                                    arraycards: this.arraycards,
                                     nivell: this.nivell,
-                                    //correct:this.correct
+                                    consecutiveCorrect: this.consecutiveCorrect
                                 }
-                                sessionStorage.partidaActual=JSON.parse(partidaActual);
-								alert("You Win with " + this.score + " points.");
-								loadpage("../");
+                                sessionStorage.partidaActual=JSON.stringify(partidaActual);
+								alert("You Win with " + this.score + " points.");            
+								loadpage("./infiniteMode.html");
 							}
 							this.firstClick = null;
 						}
@@ -165,6 +164,8 @@ class GameScene extends Phaser.Scene {
 			this.button.setBackgroundColor('#FFA07A')
 			this.save();
 		});
+        sessionStorage.clear();
+
 	}	
 	save(){
 		let partida = {
@@ -178,7 +179,8 @@ class GameScene extends Phaser.Scene {
 			tiempoEspera: this.tiempoEspera,
 			bad_clicks: this.bad_clicks,
 			arraycards: this.arraycards,
-            nivell: this.nivell
+            nivell: this.nivell,
+            consecutiveCorrect: this.consecutiveCorrect
 		}
 		let arrayPartides = [];
 		if(localStorage.partides){
@@ -192,21 +194,9 @@ class GameScene extends Phaser.Scene {
 	}
     transformacionJson(){
 		this.username = sessionStorage.getItem("username","unknown");
-		var json = localStorage.getItem("config") || '{"cards":1,"nivell":1}';
+		var json = localStorage.getItem("config") || '{"cards":2,"nivell":1}';
 		var game_data = JSON.parse(json);
 		this.nivell=game_data.nivell;
-		for(let i=1; i<=this.nivell; i++){
-            if(i%2==0){
-                //console.log(this.num_cards);
-                this.tiempoEspera-=30;
-                this.restaPunts+=3;
-                if(this.tiempoEspera<1) this.tiempoEspera=1;
-            }
-            else{
-                  this.num_cards++;
-                  if(this.num_cards>=21) this.num_cards=21;
-            }
-        }
 	}
 	mezclarYMostrar(x,y){
         this.username = sessionStorage.getItem("username","unknown");
@@ -229,13 +219,25 @@ class GameScene extends Phaser.Scene {
 			}
 		}
 	}
-    afegirImatges(){
+    afegirImatges(x,y){
         for(let k=0; k<this.arraycards.length; k++){
             this.add.image(x, y, this.arraycards[k]);
             x+=110;
             if(x>=800){
                 x=70;
                 y+=150;
+            }
+        }
+        for(let i=1; i<=this.nivell; i++){
+            if(i%2==0){
+                //console.log(this.num_cards);
+                this.tiempoEspera-=30;
+                this.restaPunts+=3;
+                if(this.tiempoEspera<1) this.tiempoEspera=1;
+            }
+            else{
+                  this.num_cards++;
+                  if(this.num_cards>=21) this.num_cards=21;
             }
         }
     }
