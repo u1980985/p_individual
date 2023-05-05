@@ -73,7 +73,7 @@ class GameScene extends Phaser.Scene {
 		setTimeout(() =>{
 			y=200; x=70;
 			for(let j=0; j < this.arraycards.length; j++){
-				if (this.arrayCartes[j]==0)
+				if (this.arrayCartes[j]==1)
 					this.cards.create(x, y, 'back');
 				else this.cards.create(x, y, 'back');
 				//Vue.set(this.current_card,i,{done:false,texture: back});
@@ -82,7 +82,6 @@ class GameScene extends Phaser.Scene {
 					x=70;
 					y+=150;
 				}
-				this.arrayCartes[k]=0;
 			}
 			this.continueGame=true;
 			let i = 0;
@@ -190,7 +189,7 @@ class GameScene extends Phaser.Scene {
 		}	
 		for(let k=0; k<this.arraycards.length; k++){
 			this.add.image(x, y, this.arraycards[k]);
-			this.arrayCartes[k]=2;
+			this.arrayCartes[k]=0;
 			x+=110;
 			if(x>=800){
 				x=70;
