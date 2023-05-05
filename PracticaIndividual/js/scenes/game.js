@@ -69,7 +69,7 @@ class GameScene extends Phaser.Scene {
 			this.mezclarYMostrar(x,y);
 		}
 		sessionStorage.clear();
-
+		//localStorage.clear();
 		setTimeout(() =>{
 			y=200; x=70;
 			for(let j=0; j < this.arraycards.length; j++){
