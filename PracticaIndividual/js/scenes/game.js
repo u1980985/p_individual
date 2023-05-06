@@ -103,7 +103,7 @@ class GameScene extends Phaser.Scene {
 								this.arrayCartes[card.id]=0;
 								this.arrayCartes[this.firstClick.id]=0;
 								this.firstClick = null;
-							},100);
+							},250);
 							if (this.score <= 0){
 								alert("Game Over");
 								loadpage("../");
