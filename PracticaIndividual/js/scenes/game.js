@@ -71,6 +71,7 @@ class GameScene extends Phaser.Scene {
 		}
 		//localStorage.clear();
 		setTimeout(() =>{
+			//ese setTimeout sirve para que cuando empieza la partida se muestren unos segundos las cartas. Tambien ponemos el "back" de las cartas
 			y=200; x=70;
 			for(let j=0; j < this.arraycards.length; j++){
 				if (this.arrayCartes[j]==0)
@@ -124,6 +125,7 @@ class GameScene extends Phaser.Scene {
 				}, card);
 			});
 		}, this.tiempoEspera);
+		//añadimos texto en pantalla y el texto "guardar" lo hacemos interactivo con pointerup, para que se pueda llamar siempre que se clique.
 		let text= this.add.text(10,10,this.username,{ font: '32px Arial', fill: 'black' });
 		this.button=this.add.text(150,10, "GUARDAR", {font: '32px Arial', fill: 'black' })
 		this.button.setInteractive();
@@ -134,7 +136,7 @@ class GameScene extends Phaser.Scene {
 		sessionStorage.clear();
 	}	
 	save(){
-		let partida = {
+		let partida = { //guardamos los datos correspondientes.
 			username: this.username,
 			arrayCartes: this.arrayCartes,
 			items: this.items,
@@ -146,7 +148,7 @@ class GameScene extends Phaser.Scene {
 			bad_clicks: this.bad_clicks,
 			arraycards: this.arraycards,
 		}
-		let arrayPartides = [];
+		let arrayPartides = []; //comprobamos si hay partidas en el local storage y lo guardamos en el mismo.
 		if(localStorage.partides){
 			arrayPartides = JSON.parse(localStorage.partides);
 			if(!Array.isArray(arrayPartides)) arrayPartides = [];
@@ -169,6 +171,7 @@ class GameScene extends Phaser.Scene {
 		  }
 	}
 	transformacionJson(){
+		//obtenemos los datos necesarios del menu opciones para ajustar el numero de cartas.
 		this.username = sessionStorage.getItem("username","unknown");
 		var json = localStorage.getItem("config") || '{"cards":2,"dificulty":"hard"}';
 		var game_data = JSON.parse(json);
@@ -184,6 +187,7 @@ class GameScene extends Phaser.Scene {
 		for (let m = 0; m < this.items.length; m++) {
 			this.arraycards.push(this.items[m]);
 		}	
+		//en el array lo unico que hacemos es añadir en una posicion X,Y las imagenes.
 		for(let k=0; k<this.arraycards.length; k++){
 			this.add.image(x, y, this.arraycards[k]);
 			this.arrayCartes[k]=0;

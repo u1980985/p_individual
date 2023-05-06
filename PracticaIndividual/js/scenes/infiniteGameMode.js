@@ -47,9 +47,6 @@ class GameScene extends Phaser.Scene {
 				this.l_partida = arrayPartides[sessionStorage.idPartida];
 		}
 		if (this.l_partida){
-			/*console.log(this.l_partida);
-			console.log(arrayPartides);
-			console.log(sessionStorage.idPartida);*/
 			this.username = this.l_partida.username;
 			this.arrayCartes=this.l_partida.arrayCartes;
 			this.items = this.l_partida.items;
@@ -77,10 +74,8 @@ class GameScene extends Phaser.Scene {
         }
 		else {
 			this.transformacionJson();
-			console.log("p2oi7502138945028934");
             this.mezclarYMostrar(x,y);
 		}
-        console.log(this.arraycards);
 		//localStorage.clear();
 		setTimeout(() =>{
 			y=200; x=70;
@@ -201,16 +196,12 @@ class GameScene extends Phaser.Scene {
 	}
 	mezclarYMostrar(x,y){
 		this.comprobarNivel();
-		console.log(this.num_cards);
         this.username = sessionStorage.getItem("username","unknown");
 		let text= this.add.text(10,10,this.username,{ font: '32px Arial', fill: 'black' });
 		this.items = this.items.slice(); // Copiem l'array
 		this.items.sort(function(){return Math.random() - 0.5}); // Array aleatòria
-		console.log(this.items);
 		this.items = this.items.slice(0, this.num_cards); // Agafem els primers numCards elements
-		console.log(this.items);
 		this.items = this.items.concat(this.items); // Dupliquem els elements
-		console.log(this.items);
 		this.items.sort(function(){return Math.random() - 0.5}); // Array aleatòria
 		
 		for (let m = 0; m < this.items.length; m++) {
@@ -239,13 +230,11 @@ class GameScene extends Phaser.Scene {
 	comprobarNivel(){
 		for(let i=1; i<=this.nivell; i++){
 			if(i%2==0){
-				//console.log(this.num_cards);
 				this.tiempoEspera-=30;
 				this.restaPunts+=3;
 				if(this.tiempoEspera<1) this.tiempoEspera=1;
 			}
 			else if(i>1){
-				console.log(this.num_cards+" "+ i);
 				  this.num_cards++;
 				  if(this.num_cards>=20) this.num_cards=20;
 			}
