@@ -31,4 +31,8 @@ function options(){
 	console.log("Options menu button");
 }
 
+function openIndexGamePhaser(){
+	loadpage("./PracticaIndividual/index.html");
+}
+
 
