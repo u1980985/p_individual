@@ -4,7 +4,7 @@ var options = function(){
 		cards:2, dificulty:"hard", nivell:1
 	};
 	var load = function(){
-		var json = localStorage.getItem("config") || '{"cards":2,"dificulty":"hard"}';
+		var json = localStorage.getItem("config") || '{"cards":2,"dificulty":"hard", "nivell:1"}';
 		options_data = JSON.parse(json);
 	};
 	var save = function(){
@@ -16,7 +16,7 @@ var options = function(){
 		data: {
 			num: 2,
 			dificulty: "normal",
-			part:1
+			nivell:1
 		},
 		created: function(){
 			this.num = options_data.cards;
@@ -31,9 +31,9 @@ var options = function(){
 			},
 			part: function(val){
 				if(val >=100)
-					this.part=100;
+					this.nivell=100;
 				else if (val < 1)
-					this.part=1;
+					this.nivell=1;
 			}
 		},
 		methods: { 
@@ -59,6 +59,9 @@ var options = function(){
 		},
 		getDificulty: function (){
 			return options_data.dificulty;
+		},
+		getNivell: function (){
+			return options_data.nivell;
 		}
 	}; 
 }();

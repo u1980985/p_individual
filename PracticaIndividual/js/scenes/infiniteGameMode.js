@@ -12,7 +12,7 @@ class GameScene extends Phaser.Scene {
 		this.nivell=1;
 		this.tiempoEspera=1500;
 		this.restaPunts=5;
-        this.nivell;
+        this.nivell=1;
 		this.items=['co', 'cb', 'sb', 'so','tb','to'];
 		this.l_partida=null;
 		this.continueGame=false;
@@ -77,7 +77,20 @@ class GameScene extends Phaser.Scene {
         }
 		else {
 			this.transformacionJson();
+			console.log("p2oi7502138945028934");
             this.mezclarYMostrar(x,y);
+			for(let i=1; i<=this.nivell; i++){
+				if(i%2==0){
+					//console.log(this.num_cards);
+					this.tiempoEspera-=30;
+					this.restaPunts+=3;
+					if(this.tiempoEspera<1) this.tiempoEspera=1;
+				}
+				else if(this.nivell>1){
+					  this.num_cards++;
+					  if(this.num_cards>=21) this.num_cards=21;
+				}
+			}
 		}
         console.log(this.nextRound);
 		//localStorage.clear();
@@ -133,7 +146,7 @@ class GameScene extends Phaser.Scene {
                                 }
                                 else{
                                     this.num_cards++;
-                                    if(this.num_cards>=21) this.num_cards=21;
+                                    if(this.num_cards>=20) this.num_cards=20;
                                 }
                                 let partidaActual = {
                                     username: this.username,
@@ -195,8 +208,10 @@ class GameScene extends Phaser.Scene {
     transformacionJson(){
 		this.username = sessionStorage.getItem("username","unknown");
 		var json = localStorage.getItem("config") || '{"cards":2,"nivell":1}';
+		console.log(json);
 		var game_data = JSON.parse(json);
 		this.nivell=game_data.nivell;
+		console.log(game_data);
 	}
 	mezclarYMostrar(x,y){
         this.username = sessionStorage.getItem("username","unknown");
