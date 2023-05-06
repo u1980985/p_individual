@@ -16,7 +16,7 @@ var options = function(){
 		data: {
 			num: 2,
 			dificulty: "normal",
-			nivell:1
+			part:1
 		},
 		created: function(){
 			this.num = options_data.cards;
@@ -31,9 +31,9 @@ var options = function(){
 			},
 			part: function(val){
 				if(val >=100)
-					this.nivell=100;
+					this.part=100;
 				else if (val < 1)
-					this.nivell=1;
+					this.part=1;
 			}
 		},
 		methods: { 
@@ -44,6 +44,7 @@ var options = function(){
 			save: function(){
 				options_data.cards = this.num;
 				options_data.dificulty = this.dificulty;
+				options_data.nivell=this.part;
 				save();
 				loadpage("../");
 			}

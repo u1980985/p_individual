@@ -79,20 +79,8 @@ class GameScene extends Phaser.Scene {
 			this.transformacionJson();
 			console.log("p2oi7502138945028934");
             this.mezclarYMostrar(x,y);
-			for(let i=1; i<=this.nivell; i++){
-				if(i%2==0){
-					//console.log(this.num_cards);
-					this.tiempoEspera-=30;
-					this.restaPunts+=3;
-					if(this.tiempoEspera<1) this.tiempoEspera=1;
-				}
-				else if(this.nivell>1){
-					  this.num_cards++;
-					  if(this.num_cards>=21) this.num_cards=21;
-				}
-			}
 		}
-        console.log(this.nextRound);
+        console.log(this.arraycards);
 		//localStorage.clear();
 		setTimeout(() =>{
 			y=200; x=70;
@@ -196,7 +184,7 @@ class GameScene extends Phaser.Scene {
             consecutiveCorrect: this.consecutiveCorrect
 		}
 		let arrayPartides = [];
-		if(localStorage.partides){
+		if(localStorage.partidesInfinitas){
 			arrayPartides = JSON.parse(localStorage.partidesInfinitas);
 			if(!Array.isArray(arrayPartides)) arrayPartides = [];
 		}
@@ -207,20 +195,24 @@ class GameScene extends Phaser.Scene {
 	}
     transformacionJson(){
 		this.username = sessionStorage.getItem("username","unknown");
-		var json = localStorage.getItem("config") || '{"cards":2,"nivell":1}';
-		console.log(json);
-		var game_data = JSON.parse(json);
-		this.nivell=game_data.nivell;
-		console.log(game_data);
+		var json = localStorage.getItem("config") || '{"cards":2,"dificulty":"hard", "nivell:1"}';
+		var data = JSON.parse(json);
+		this.nivell= data.nivell;
 	}
 	mezclarYMostrar(x,y){
+		this.comprobarNivel();
+		console.log(this.num_cards);
         this.username = sessionStorage.getItem("username","unknown");
 		let text= this.add.text(10,10,this.username,{ font: '32px Arial', fill: 'black' });
 		this.items = this.items.slice(); // Copiem l'array
 		this.items.sort(function(){return Math.random() - 0.5}); // Array aleatòria
+		console.log(this.items);
 		this.items = this.items.slice(0, this.num_cards); // Agafem els primers numCards elements
+		console.log(this.items);
 		this.items = this.items.concat(this.items); // Dupliquem els elements
+		console.log(this.items);
 		this.items.sort(function(){return Math.random() - 0.5}); // Array aleatòria
+		
 		for (let m = 0; m < this.items.length; m++) {
 			this.arraycards.push(this.items[m]);
 		}	
@@ -243,17 +235,20 @@ class GameScene extends Phaser.Scene {
                 y+=150;
             }
         }
-        for(let i=1; i<=this.nivell; i++){
-            if(i%2==0){
-                //console.log(this.num_cards);
-                this.tiempoEspera-=30;
-                this.restaPunts+=3;
-                if(this.tiempoEspera<1) this.tiempoEspera=1;
-            }
-            else{
-                  this.num_cards++;
-                  if(this.num_cards>=21) this.num_cards=21;
-            }
-        }
     }
+	comprobarNivel(){
+		for(let i=1; i<=this.nivell; i++){
+			if(i%2==0){
+				//console.log(this.num_cards);
+				this.tiempoEspera-=30;
+				this.restaPunts+=3;
+				if(this.tiempoEspera<1) this.tiempoEspera=1;
+			}
+			else if(i>1){
+				console.log(this.num_cards+" "+ i);
+				  this.num_cards++;
+				  if(this.num_cards>=20) this.num_cards=20;
+			}
+		}
+	}
 }
