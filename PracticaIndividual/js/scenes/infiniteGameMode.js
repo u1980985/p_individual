@@ -59,7 +59,8 @@ class GameScene extends Phaser.Scene {
 			this.arraycards=this.l_partida.arraycards;
             this.nivell=this.l_partida.nivell;
             this.consecutiveCorrect=this.l_partida.consecutiveCorrect;
-            
+            if(this.nivell>=100)
+				this.nivell=100;
 			this.afegirImatges(x,y);
 		}
         else if (this.nextRound){
@@ -70,6 +71,8 @@ class GameScene extends Phaser.Scene {
             this.tiempoEspera= this.nextRound.tiempoEspera;
             this.nivell= this.nextRound.nivell;
             this.consecutiveCorrect=this.nextRound.consecutiveCorrect;
+			if(this.nivell>=100)
+				this.nivell=100;
             this.mezclarYMostrar(x,y);
         }
 		else {
@@ -122,11 +125,14 @@ class GameScene extends Phaser.Scene {
 							if (this.correct >= this.num_cards){
                                 this.score +=this.correct*this.consecutiveCorrect;
                                 this.nivell++;
+								if(this.nivell>=100)
+									this.nivell=100;
                                 if(this.nivell%2==0){
                                     this.tiempoEspera-=30;
                                     this.restaPunts+=3;
                                     if(this.tiempoEspera<1) this.tiempoEspera=1;
                                 }
+								
                                 else{
                                     this.num_cards++;
                                     if(this.num_cards>=20) this.num_cards=20;
